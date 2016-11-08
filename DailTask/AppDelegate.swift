@@ -15,7 +15,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+        // 1.初始化window
+        self.window = UIWindow(frame:UIScreen.mainScreen().bounds)
+        // 2.设置rootController
+        let mainController = HomePageController()
+        let navController:PFBaseNavigationController = PFBaseNavigationController(rootViewController: mainController)
+        self.window?.rootViewController = navController
+        self.window?.makeKeyAndVisible()
         return true
     }
 
