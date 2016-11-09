@@ -15,12 +15,12 @@ class HomePageController: PFBaseViewController {
     }
     
     func setNavBarButton(){
-        let btn = UIButton(type: UIButtonType.Custom)
-        btn.setImage(UIImage(named: "tianjiashouhuodizhi"), forState: UIControlState.Normal)
-        btn.setTitleColor(UIColor.grayColor(), forState: .Normal)
-        btn.frame = CGRectMake(0, 0, 80, 40)
-        btn.titleLabel?.font = UIFont.systemFontOfSize(14.0)
-        btn.addTarget(self, action: #selector(addNewTask), forControlEvents: .TouchUpInside)
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setImage(UIImage(named: "tianjiashouhuodizhi"), for: UIControlState())
+        btn.setTitleColor(UIColor.gray, for: UIControlState())
+        btn.frame = CGRect(x: 0, y: 0, width: 80, height: 40)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 14.0)
+        btn.addTarget(self, action: #selector(addNewTask), for: .touchUpInside)
         let barBtn = UIBarButtonItem(customView: btn);
         self.navigationItem.rightBarButtonItem = barBtn
     }

@@ -12,7 +12,7 @@ class PFBaseViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.whiteColor()
+        view.backgroundColor = UIColor.white
         self.navigationItem.title = "首页"
     }
     
