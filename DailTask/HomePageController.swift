@@ -8,22 +8,29 @@
 
 import UIKit
 
-class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollectionViewDataSource {
+class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
     //var collectionView:UICollectionView? = nil
     
-    
+    // flowLayout
     lazy var layout:UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         // 方向
         layout.scrollDirection = UICollectionViewScrollDirection.vertical
-        layout.itemSize = CGSize(width: 60, height: 75)
+        let width:CGFloat = self.view.frame.size.width - 10
+        layout.itemSize = CGSize(width: width, height: 75)
         layout.minimumLineSpacing = 10 // 上下间距
         layout.minimumInteritemSpacing = 10 //左右间距
+        layout.headerReferenceSize = CGSize(width: 375, height: 200)
         return layout
     }()
     
+    // collectionView
     lazy var collectionView:UICollectionView = {
-        let collection:UICollectionView = UICollectionView(frame:self.view.bounds, collectionViewLayout: self.layout)
+        var  frame:CGRect = self.view.bounds
+        //frame.size.width -= 20
+        //frame.origin.x = 10
+        let collection:UICollectionView = UICollectionView(frame:frame, collectionViewLayout: self.layout)
+        collection.backgroundColor = UIColor.white
         collection.delegate = self
         collection.dataSource = self
         return collection
@@ -32,6 +39,9 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setNavBarButton()
+        view.addSubview(collectionView)
+        collectionView.register(PFTaskCollectionViewCell.classForCoder(), forCellWithReuseIdentifier: "ID")
+        collectionView.register(CollectionReusableView.classForCoder(), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "head")
     }
     
     func setNavBarButton(){
@@ -47,11 +57,23 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return 15
+    }
+    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+//        return CGSize(width: 365, height: 200)
+//    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "head", for: indexPath)
+        return headerView
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let item = UICollectionViewCell()
+        
+       let  item = collectionView.dequeueReusableCell(withReuseIdentifier: "ID", for: indexPath)
+        item.layer.cornerRadius = 2.0
+        item.layer.masksToBounds = true
         item.backgroundColor = UIColor.gray
         return item
     }

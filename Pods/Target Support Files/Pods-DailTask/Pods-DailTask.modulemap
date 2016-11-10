@@ -1,0 +1,6 @@
+framework module Pods_DailTask {
+  umbrella header "Pods-DailTask-umbrella.h"
+
+  export *
+  module * { export * }
+}
