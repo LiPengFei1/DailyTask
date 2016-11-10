@@ -16,11 +16,12 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         let layout = UICollectionViewFlowLayout()
         // 方向
         layout.scrollDirection = UICollectionViewScrollDirection.vertical
-        let width:CGFloat = self.view.frame.size.width - 10
-        layout.itemSize = CGSize(width: width, height: 75)
-        layout.minimumLineSpacing = 10 // 上下间距
-        layout.minimumInteritemSpacing = 10 //左右间距
+        let width:CGFloat = self.view.frame.size.width - 6
+        layout.itemSize = CGSize(width: width / 2, height: width / 2)
+        layout.minimumLineSpacing = 5 // 上下间距
+        layout.minimumInteritemSpacing = 0 //左右间距
         layout.headerReferenceSize = CGSize(width: 375, height: 200)
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         return layout
     }()
     
@@ -30,7 +31,7 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         //frame.size.width -= 20
         //frame.origin.x = 10
         let collection:UICollectionView = UICollectionView(frame:frame, collectionViewLayout: self.layout)
-        collection.backgroundColor = UIColor.white
+        collection.backgroundColor = UIColor(colorLiteralRed: 246.0 / 255.0, green: 246.0 / 255.0, blue: 246.0 / 255.0, alpha: 1.0)
         collection.delegate = self
         collection.dataSource = self
         return collection
@@ -72,9 +73,10 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
        let  item = collectionView.dequeueReusableCell(withReuseIdentifier: "ID", for: indexPath)
-        item.layer.cornerRadius = 2.0
+        item.layer.cornerRadius = 3.0
         item.layer.masksToBounds = true
-        item.backgroundColor = UIColor.gray
+//        item.layer.borderColor = UIColor.lightGray.cgColor
+//        item.layer.borderWidth = 1
         return item
     }
     
