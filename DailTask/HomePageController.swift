@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
     //var collectionView:UICollectionView? = nil
@@ -43,7 +44,53 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         view.addSubview(collectionView)
         collectionView.register(PFTaskCollectionViewCell.classForCoder(), forCellWithReuseIdentifier: "ID")
         collectionView.register(CollectionReusableView.classForCoder(), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "head")
+        
+        // 使用本地data文件
+//        let model:NSManagedObjectModel = NSManagedObjectModel.mergedModel(from: nil)!
+//        let psc = NSPersistentStoreCoordinator(managedObjectModel: model)
+//        let docs:String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
+//        let url:NSURL = NSURL(fileURLWithPath: docs.appending("/DailTask.data"))
+//        print(url)
+//        let error:Error? = nil
+//        let store = try! psc.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url as URL, options: nil)
+//        let context = NSManagedObjectContext()
+//        context.persistentStoreCoordinator = psc
+
+        
+        // 上下文
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        
+        // 存
+        let task:TaskExt = NSEntityDescription.insertNewObject(forEntityName: "TaskExt", into: context) as! TaskExt
+        task.categoryId = "kkk"
+        task.categoryName = "123123"
+        try! context.save()
+        
+        // 取
+        let fetRequest:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest<NSFetchRequestResult>()
+        fetRequest.entity = NSEntityDescription.entity(forEntityName: "TaskExt", in: context)
+//        let objects = try! context.execute(fetRequest) as! [NSManagedObject]
+        
+        
+        do{
+            let objects = try context.fetch(fetRequest) as! [NSManagedObject]
+            for task in objects as! [TaskExt]{
+                print("id = \(task.categoryId)")
+            }
+        }catch let error{
+            print(error)
+        }
+        
+        
+        
     }
+    
+    //使用coredata
+    
+    
+    
+    
     
     func setNavBarButton(){
         let btn = UIButton(type: UIButtonType.custom)

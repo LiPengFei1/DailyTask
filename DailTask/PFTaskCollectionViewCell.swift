@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SnapKit
 
 class PFTaskCollectionViewCell: UICollectionViewCell {
     
@@ -15,7 +14,6 @@ class PFTaskCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         self.setupUI()
     }
-    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
