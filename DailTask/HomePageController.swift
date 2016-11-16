@@ -10,7 +10,6 @@ import UIKit
 import CoreData
 
 class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
-    //var collectionView:UICollectionView? = nil
     
     // flowLayout
     lazy var layout:UICollectionViewFlowLayout = {
@@ -45,6 +44,8 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         collectionView.register(PFTaskCollectionViewCell.classForCoder(), forCellWithReuseIdentifier: "ID")
         collectionView.register(CollectionReusableView.classForCoder(), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "head")
         
+        
+        
         // 使用本地data文件
 //        let model:NSManagedObjectModel = NSManagedObjectModel.mergedModel(from: nil)!
 //        let psc = NSPersistentStoreCoordinator(managedObjectModel: model)
@@ -55,7 +56,6 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
 //        let store = try! psc.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url as URL, options: nil)
 //        let context = NSManagedObjectContext()
 //        context.persistentStoreCoordinator = psc
-
         
         // 上下文
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -63,40 +63,48 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         
         // 存
         let task:TaskExt = NSEntityDescription.insertNewObject(forEntityName: "TaskExt", into: context) as! TaskExt
-        task.categoryId = "kkk"
-        task.categoryName = "123123"
+        task.extId = "kkk"
+        task.extName = "123123"
+        let taskDaily = NSEntityDescription.insertNewObject(forEntityName: "TaskDaily", into: context) as! TaskDaily
+        taskDaily.extId = "kkk"
+        taskDaily.content = "hhf2lkva"
+        taskDaily.create_Time = NSDate()
+        taskDaily.taskId = "1231"
+        taskDaily.taskName = "k"
         try! context.save()
         
         // 取
         let fetRequest:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest<NSFetchRequestResult>()
         fetRequest.entity = NSEntityDescription.entity(forEntityName: "TaskExt", in: context)
 //        let objects = try! context.execute(fetRequest) as! [NSManagedObject]
-        
-        
+        var objects:[NSManagedObject] = []
         do{
-            let objects = try context.fetch(fetRequest) as! [NSManagedObject]
+            objects = try context.fetch(fetRequest) as! [NSManagedObject]
+
+        }catch let error{
+            print(error)
+        }
+        let request:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest<NSFetchRequestResult>()
+        request.entity = NSEntityDescription.entity(forEntityName: "TaskDaily", in: context)
+        do{
+            let obj = try context.fetch(request) as! [NSManagedObject]
+            for task in obj as! [TaskDaily]{
+                print("taskName = \(task.taskName)")
+            }
             for task in objects as! [TaskExt]{
-                print("id = \(task.categoryId)")
+                print("id = \(task.extId)")
             }
         }catch let error{
             print(error)
         }
-        
-        
-        
     }
     
     //使用coredata
-    
-    
-    
-    
-    
     func setNavBarButton(){
         let btn = UIButton(type: UIButtonType.custom)
         btn.setImage(UIImage(named: "tianjiashouhuodizhi"), for: UIControlState())
         btn.setTitleColor(UIColor.gray, for: UIControlState())
-        btn.setTitle("添加任务", for: .normal)
+        btn.setTitle(" 添加任务", for: .normal)
         btn.frame = CGRect(x: 0, y: 0, width: 80, height: 40)
         btn.titleLabel?.font = UIFont.systemFont(ofSize: 14.0)
         btn.addTarget(self, action: #selector(addNewTask), for: .touchUpInside)
@@ -115,6 +123,10 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "head", for: indexPath)
         return headerView
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("indexPath = (\(indexPath.section),\(indexPath.row))")
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

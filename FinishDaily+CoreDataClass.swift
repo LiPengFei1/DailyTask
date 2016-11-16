@@ -1,5 +1,5 @@
 //
-//  TaskDaily+CoreDataClass.swift
+//  FinishDaily+CoreDataClass.swift
 //  
 //
 //  Created by 李鹏飞 on 16/11/16.
@@ -10,7 +10,7 @@
 import Foundation
 import CoreData
 
-@objc(TaskDaily)
-public class TaskDaily: NSManagedObject {
+@objc(FinishDaily)
+public class FinishDaily: NSManagedObject {
 
 }

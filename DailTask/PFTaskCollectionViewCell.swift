@@ -21,6 +21,20 @@ class PFTaskCollectionViewCell: UICollectionViewCell {
     
     func setupUI(){
         contentView.addSubview(titleView)
+        
+        let path = UIBezierPath()
+        let startPoint = CGPoint(x: self.bounds.origin.x, y: 44)
+        let endPoint = CGPoint(x: self.bounds.origin.x + self.bounds.size.width, y: 44)
+        path.move(to: startPoint)
+        path.addLine(to: endPoint)
+        dottedLayer.path = path.cgPath
+        dottedLayer.strokeColor = UIColor.gray.cgColor
+        dottedLayer.fillColor = UIColor.clear.cgColor
+        self.layer.addSublayer(dottedLayer)
+        
+        
+        
+        
         titleView.snp.makeConstraints { (make) in
             make.left.equalTo(contentView)
             make.right.equalTo(contentView)
@@ -60,5 +74,9 @@ class PFTaskCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
+    lazy var dottedLayer:CAShapeLayer = {
+        let lineLayer = CAShapeLayer()
+        return lineLayer
+    }()
 
 }
