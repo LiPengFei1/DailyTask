@@ -16,9 +16,9 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         let layout = UICollectionViewFlowLayout()
         // 方向
         layout.scrollDirection = UICollectionViewScrollDirection.vertical
-        let width:CGFloat = self.view.frame.size.width - 6
-        layout.itemSize = CGSize(width: width / 2, height: width / 2)
-        layout.minimumLineSpacing = 5 // 上下间距
+        let width:CGFloat = (self.view.frame.size.width - 24)
+        layout.itemSize = CGSize(width: width , height: width / 3)
+        layout.minimumLineSpacing = 10 // 上下间距
         layout.minimumInteritemSpacing = 0 //左右间距
         layout.headerReferenceSize = CGSize(width: 375, height: 200)
         layout.sectionInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
@@ -31,7 +31,7 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         //frame.size.width -= 20
         //frame.origin.x = 10
         let collection:UICollectionView = UICollectionView(frame:frame, collectionViewLayout: self.layout)
-        collection.backgroundColor = UIColor(colorLiteralRed: 246.0 / 255.0, green: 246.0 / 255.0, blue: 246.0 / 255.0, alpha: 1.0)
+        collection.backgroundColor = BGCOLOR
         collection.delegate = self
         collection.dataSource = self
         return collection
@@ -127,6 +127,9 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("indexPath = (\(indexPath.section),\(indexPath.row))")
+        
+        let childController = HomePageController()
+        self.navigationController?.pushViewController(childController, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -140,6 +143,17 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
     }
     
     func addNewTask(){
-        print("添加新任务")
+        let taskContrller = AddTaskViewController()
+        taskContrller.title = "添加"
+        self.navigationController?.pushViewController(taskContrller, animated: true)
     }
+    
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        print(scrollView.contentOffset.y)
+//        if scrollView.contentOffset.y > -64 {
+//            self.navigationController?.setNavigationBarHidden(true, animated: true)
+//        }else if scrollView.contentOffset.y <= -64{
+//            self.navigationController?.setNavigationBarHidden(false, animated: true)
+//        }
+//    }
 }

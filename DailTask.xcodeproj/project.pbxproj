@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		32358FE6964B3BFB68F05428 /* Pods_DailTask.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00281812AE63E35AF9D3948A /* Pods_DailTask.framework */; };
+		E24E98751DDD9F8F00E05556 /* AddTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24E98741DDD9F8F00E05556 /* AddTaskViewController.swift */; };
+		E24E98771DDDA1A800E05556 /* PFLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24E98761DDDA1A800E05556 /* PFLabel.swift */; };
+		E24E98791DDDA76C00E05556 /* PerfixHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24E98781DDDA76C00E05556 /* PerfixHeader.swift */; };
 		E24F025A1DD08BEE00B110F6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24F02591DD08BEE00B110F6 /* AppDelegate.swift */; };
 		E24F025C1DD08BEE00B110F6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24F025B1DD08BEE00B110F6 /* ViewController.swift */; };
 		E24F02611DD08BEE00B110F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E24F02601DD08BEE00B110F6 /* Assets.xcassets */; };
@@ -25,6 +28,9 @@
 		00281812AE63E35AF9D3948A /* Pods_DailTask.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DailTask.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0559A7B64149E8AC413B88A7 /* Pods-DailTask.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DailTask.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DailTask/Pods-DailTask.debug.xcconfig"; sourceTree = "<group>"; };
 		C54BF2393AADBDCBF8E4A277 /* Pods-DailTask.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DailTask.release.xcconfig"; path = "Pods/Target Support Files/Pods-DailTask/Pods-DailTask.release.xcconfig"; sourceTree = "<group>"; };
+		E24E98741DDD9F8F00E05556 /* AddTaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddTaskViewController.swift; sourceTree = "<group>"; };
+		E24E98761DDDA1A800E05556 /* PFLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PFLabel.swift; sourceTree = "<group>"; };
+		E24E98781DDDA76C00E05556 /* PerfixHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PerfixHeader.swift; sourceTree = "<group>"; };
 		E24F02561DD08BEE00B110F6 /* DailTask.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DailTask.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E24F02591DD08BEE00B110F6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E24F025B1DD08BEE00B110F6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -96,12 +102,15 @@
 				E2F3CC361DD1A77A006C47CC /* PFBaseViewController.swift */,
 				E2F3CC3A1DD1D97D006C47CC /* HomePageController.swift */,
 				E2F2B79C1DD426940029BAB6 /* PFTaskCollectionViewCell.swift */,
+				E24E98741DDD9F8F00E05556 /* AddTaskViewController.swift */,
 				E2F2B7981DD417770029BAB6 /* CollectionViewCell.swift */,
 				E2F2B79A1DD41D3D0029BAB6 /* CollectionReusableView.swift */,
 				E2F9B21F1DD59B3E00D20F10 /* DailTask.xcdatamodeld */,
 				E24F02601DD08BEE00B110F6 /* Assets.xcassets */,
 				E24F02621DD08BEE00B110F6 /* LaunchScreen.storyboard */,
 				E24F02651DD08BEE00B110F6 /* Info.plist */,
+				E24E98761DDDA1A800E05556 /* PFLabel.swift */,
+				E24E98781DDDA76C00E05556 /* PerfixHeader.swift */,
 			);
 			path = DailTask;
 			sourceTree = "<group>";
@@ -245,6 +254,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E24E98791DDDA76C00E05556 /* PerfixHeader.swift in Sources */,
+				E24E98771DDDA1A800E05556 /* PFLabel.swift in Sources */,
 				E2F9B2211DD59B3E00D20F10 /* DailTask.xcdatamodeld in Sources */,
 				E2F2B79B1DD41D3D0029BAB6 /* CollectionReusableView.swift in Sources */,
 				E2F2B79D1DD426940029BAB6 /* PFTaskCollectionViewCell.swift in Sources */,
@@ -254,6 +265,7 @@
 				E2F3CC371DD1A77A006C47CC /* PFBaseViewController.swift in Sources */,
 				E24F025C1DD08BEE00B110F6 /* ViewController.swift in Sources */,
 				E24F025A1DD08BEE00B110F6 /* AppDelegate.swift in Sources */,
+				E24E98751DDD9F8F00E05556 /* AddTaskViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

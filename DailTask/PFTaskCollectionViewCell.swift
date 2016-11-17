@@ -19,21 +19,35 @@ class PFTaskCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    func addAnimationToShapeLayer(layer:CAShapeLayer,keyPath:String,fromValue:CGFloat,toValue:CGFloat,duration:TimeInterval){
+        
+        let animation = CABasicAnimation(keyPath: keyPath)
+        animation.duration = duration; //动画时间
+        animation.fromValue = fromValue
+        animation.toValue = toValue
+        layer.add(animation, forKey: keyPath)
+    }
+    
     func setupUI(){
         contentView.addSubview(titleView)
         
         let path = UIBezierPath()
-        let startPoint = CGPoint(x: self.bounds.origin.x, y: 44)
+        let startPoint = CGPoint(x: self.bounds.origin.x , y: 44)
         let endPoint = CGPoint(x: self.bounds.origin.x + self.bounds.size.width, y: 44)
         path.move(to: startPoint)
         path.addLine(to: endPoint)
+        
         dottedLayer.path = path.cgPath
-        dottedLayer.strokeColor = UIColor.gray.cgColor
+        dottedLayer.lineJoin = kCALineJoinRound
+        let arr = NSArray(array: [1,0])
+        dottedLayer.lineDashPattern = arr as? [NSNumber]
+        dottedLayer.lineWidth = 2
+        dottedLayer.strokeColor = UIColor(colorLiteralRed: 246.0 / 255.0, green: 246.0 / 255.0, blue: 246.0 / 255.0, alpha: 1.0).cgColor
         dottedLayer.fillColor = UIColor.clear.cgColor
+        
+        self.addAnimationToShapeLayer(layer: dottedLayer, keyPath: "strokeEnd", fromValue: 0, toValue: 1, duration: 0.5)
         self.layer.addSublayer(dottedLayer)
-        
-        
-        
         
         titleView.snp.makeConstraints { (make) in
             make.left.equalTo(contentView)
@@ -43,11 +57,30 @@ class PFTaskCollectionViewCell: UICollectionViewCell {
         }
         titleView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { (make) in
-            make.left.equalTo(titleView).offset(0)
+            make.left.equalTo(titleView).offset(12)
             make.top.equalTo(titleView).offset(0)
-            make.bottom.equalTo(titleView).offset(0)
-            make.right.equalTo(titleView).offset(0)
+            make.height.equalTo(44)
         }
+        
+        titleView.addSubview(finishBtn)
+        finishBtn.snp.makeConstraints { (make) in
+            make.right.equalTo(titleView).offset(-12)
+            make.centerY.equalTo(titleLabel).offset(0)
+            make.width.equalTo(22)
+            make.height.equalTo(22)
+        }
+        
+        titleView.addSubview(contentLabel)
+        contentLabel.snp.makeConstraints { (make) in
+            make.left.equalTo(titleView).offset(12)
+            make.right.equalTo(titleView).offset(-12)
+            make.bottom.equalTo(titleView).offset(-12)
+            make.top.equalTo(titleView).offset(56)
+        }
+    }
+    
+    func clickFinish(button:UIButton){
+        button.backgroundColor = UIColor.lightGray
     }
     
     //懒加载
@@ -62,15 +95,32 @@ class PFTaskCollectionViewCell: UICollectionViewCell {
         let label:UILabel = UILabel()
         label.text = "这是一个非常有意思的标题"
         label.font = UIFont.systemFont(ofSize: 14.0)
-        label.textAlignment = NSTextAlignment.center
+        label.textAlignment = NSTextAlignment.left
         return label
+    }()
+    
+    lazy var contentLabel:UILabel = {
+        let label:UILabel = UILabel()
+        label.text = "这里都是一些非常有意思的内容，看看有没有你喜欢的。"
+        label.font = UIFont.systemFont(ofSize: 12.0)
+        label.textAlignment = NSTextAlignment.left
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    lazy var levelView:UIView = {
+        let level:UIView = UIView()
+        return level
     }()
     
     lazy var finishBtn:UIButton = {
         let button:UIButton = UIButton()
-        button.setTitle("完成", for: .normal)
+//        button.setTitle("完成", for: .normal)
         button.setTitleColor(UIColor.orange, for: .normal)
-        button.backgroundColor = UIColor.black
+        button.backgroundColor = UIColor.orange
+        button.layer.cornerRadius = 11
+        button.layer.masksToBounds = true
+        button.addTarget(self, action: #selector(clickFinish(button:)), for: .touchUpInside)
         return button
     }()
     

@@ -2,7 +2,7 @@
 //  FinishDaily+CoreDataProperties.swift
 //  
 //
-//  Created by 李鹏飞 on 16/11/16.
+//  Created by 李鹏飞 on 16/11/17.
 //
 //  This file was automatically generated and should not be edited.
 //
