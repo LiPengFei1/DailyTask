@@ -21,7 +21,7 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         layout.minimumLineSpacing = 10 // 上下间距
         layout.minimumInteritemSpacing = 0 //左右间距
         layout.headerReferenceSize = CGSize(width: 375, height: 200)
-        layout.sectionInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         return layout
     }()
     
@@ -30,6 +30,7 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         var  frame:CGRect = self.view.bounds
         //frame.size.width -= 20
         //frame.origin.x = 10
+        frame.size.height -= 64
         let collection:UICollectionView = UICollectionView(frame:frame, collectionViewLayout: self.layout)
         collection.backgroundColor = BGCOLOR
         collection.delegate = self
@@ -62,16 +63,16 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         let context = appDelegate.persistentContainer.viewContext
         
         // 存
-        let task:TaskExt = NSEntityDescription.insertNewObject(forEntityName: "TaskExt", into: context) as! TaskExt
-        task.extId = "kkk"
-        task.extName = "123123"
-        let taskDaily = NSEntityDescription.insertNewObject(forEntityName: "TaskDaily", into: context) as! TaskDaily
-        taskDaily.extId = "kkk"
-        taskDaily.content = "hhf2lkva"
-        taskDaily.create_Time = NSDate()
-        taskDaily.taskId = "1231"
-        taskDaily.taskName = "k"
-        try! context.save()
+//        let task:TaskExt = NSEntityDescription.insertNewObject(forEntityName: "TaskExt", into: context) as! TaskExt
+//        task.extId = "kkk"
+//        task.extName = "123123"
+//        let taskDaily = NSEntityDescription.insertNewObject(forEntityName: "TaskDaily", into: context) as! TaskDaily
+//        taskDaily.extId = "kkk"
+//        taskDaily.content = "hhf2lkva"
+//        taskDaily.create_Time = NSDate()
+//        taskDaily.taskId = "1231"
+//        taskDaily.taskName = "k"
+//        try! context.save()
         
         // 取
         let fetRequest:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest<NSFetchRequestResult>()
@@ -85,14 +86,14 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
             print(error)
         }
         let request:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest<NSFetchRequestResult>()
-        request.entity = NSEntityDescription.entity(forEntityName: "TaskDaily", in: context)
+        request.entity = NSEntityDescription.entity(forEntityName: "DailyTask", in: context)
         do{
             let obj = try context.fetch(request) as! [NSManagedObject]
-            for task in obj as! [TaskDaily]{
-                print("taskName = \(task.taskName)")
+            for task in obj as! [DailyTask]{
+                print("taskName = \(task.taskName!)")
             }
             for task in objects as! [TaskExt]{
-                print("id = \(task.extId)")
+                print("id = \(task.extId!),name = \(task.extName)")
             }
         }catch let error{
             print(error)

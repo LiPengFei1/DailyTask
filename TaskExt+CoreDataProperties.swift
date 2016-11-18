@@ -2,7 +2,7 @@
 //  TaskExt+CoreDataProperties.swift
 //  
 //
-//  Created by 李鹏飞 on 16/11/17.
+//  Created by 李鹏飞 on 16/11/18.
 //
 //  This file was automatically generated and should not be edited.
 //
@@ -20,6 +20,25 @@ extension TaskExt {
     @NSManaged public var extId: String?
     @NSManaged public var extName: String?
     @NSManaged public var levelId: String?
-    @NSManaged public var relationship: TaskDaily?
+    @NSManaged public var extDescription: String?
+    @NSManaged public var dailyTasks: NSSet?
+    @NSManaged public var state: StateDaily?
+
+}
+
+// MARK: Generated accessors for dailyTasks
+extension TaskExt {
+
+    @objc(addDailyTasksObject:)
+    @NSManaged public func addToDailyTasks(_ value: DailyTask)
+
+    @objc(removeDailyTasksObject:)
+    @NSManaged public func removeFromDailyTasks(_ value: DailyTask)
+
+    @objc(addDailyTasks:)
+    @NSManaged public func addToDailyTasks(_ values: NSSet)
+
+    @objc(removeDailyTasks:)
+    @NSManaged public func removeFromDailyTasks(_ values: NSSet)
 
 }

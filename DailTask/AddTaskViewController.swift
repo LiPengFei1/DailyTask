@@ -71,7 +71,15 @@ class AddTaskViewController: UIViewController {
     }
     
     func saveTask(){
-        print("保存任务")
+        let taskExt = TaskExt.newTaskExt()
+        taskExt.extName = self.titleField.text?.trimmingCharacters(in: CharacterSet())
+        taskExt.extDescription = self.contentView.text.trimmingCharacters(in: CharacterSet())
+        let b = taskExt.insertTaskExtToData()
+        if b {
+            print("保存成功")
+        }else{
+            print("保存失败")
+        }
     }
 
     lazy var bgView:UIView = {
@@ -85,7 +93,7 @@ class AddTaskViewController: UIViewController {
     lazy var titleField:UITextField = {
         let textField:UITextField = UITextField()
         textField.borderStyle = UITextBorderStyle.roundedRect
-        textField.placeholder = " 请输入标题"
+        textField.placeholder = "请输入标题"
         return textField
     }()
     

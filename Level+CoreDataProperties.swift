@@ -2,7 +2,7 @@
 //  Level+CoreDataProperties.swift
 //  
 //
-//  Created by 李鹏飞 on 16/11/17.
+//  Created by 李鹏飞 on 16/11/18.
 //
 //  This file was automatically generated and should not be edited.
 //

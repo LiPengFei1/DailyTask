@@ -62,12 +62,18 @@ class PFTaskCollectionViewCell: UICollectionViewCell {
             make.height.equalTo(44)
         }
         
+        titleView.addSubview(timeLabel)
+        timeLabel.snp.makeConstraints { (make) in
+            make.right.equalTo(titleView).offset(-12)
+            make.centerY.equalTo(titleLabel).offset(0)
+        }
+        
         titleView.addSubview(finishBtn)
         finishBtn.snp.makeConstraints { (make) in
             make.right.equalTo(titleView).offset(-12)
             make.centerY.equalTo(titleLabel).offset(0)
-            make.width.equalTo(22)
-            make.height.equalTo(22)
+            make.width.equalTo(20)
+            make.height.equalTo(20)
         }
         
         titleView.addSubview(contentLabel)
@@ -91,11 +97,16 @@ class PFTaskCollectionViewCell: UICollectionViewCell {
         return titleView
     }()
     
-    lazy var titleLabel:UILabel = {
-        let label:UILabel = UILabel()
-        label.text = "这是一个非常有意思的标题"
-        label.font = UIFont.systemFont(ofSize: 14.0)
+    lazy var titleLabel:PFLabel = {
+        let label:PFLabel = PFLabel(text: "有趣的标题", font: UIFont.systemFont(ofSize: 14.0))
         label.textAlignment = NSTextAlignment.left
+        return label
+    }()
+    
+    lazy var timeLabel:PFLabel = {
+        let label:PFLabel = PFLabel(text: "2016.11.18", font: UIFont.systemFont(ofSize: 12.0))
+        label.textColor = UIColor(white: 0, alpha: 0.4)
+        label.textAlignment = NSTextAlignment.right
         return label
     }()
     
@@ -115,10 +126,11 @@ class PFTaskCollectionViewCell: UICollectionViewCell {
     
     lazy var finishBtn:UIButton = {
         let button:UIButton = UIButton()
+        button.isHidden = true
 //        button.setTitle("完成", for: .normal)
         button.setTitleColor(UIColor.orange, for: .normal)
         button.backgroundColor = UIColor.orange
-        button.layer.cornerRadius = 11
+        button.layer.cornerRadius = 10
         button.layer.masksToBounds = true
         button.addTarget(self, action: #selector(clickFinish(button:)), for: .touchUpInside)
         return button

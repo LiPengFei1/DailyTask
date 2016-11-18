@@ -2,10 +2,16 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Level+CoreDataClass.swift">
+      location = "group:StateDaily+CoreDataClass.swift">
    </FileRef>
    <FileRef
-      location = "group:Level+CoreDataProperties.swift">
+      location = "group:StateDaily+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
+      location = "group:DailyTask+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
+      location = "group:DailyTask+CoreDataProperties.swift">
    </FileRef>
    <FileRef
       location = "group:TaskExt+CoreDataClass.swift">
@@ -14,16 +20,10 @@
       location = "group:TaskExt+CoreDataProperties.swift">
    </FileRef>
    <FileRef
-      location = "group:FinishDaily+CoreDataClass.swift">
+      location = "group:Level+CoreDataClass.swift">
    </FileRef>
    <FileRef
-      location = "group:FinishDaily+CoreDataProperties.swift">
-   </FileRef>
-   <FileRef
-      location = "group:TaskDaily+CoreDataClass.swift">
-   </FileRef>
-   <FileRef
-      location = "group:TaskDaily+CoreDataProperties.swift">
+      location = "group:Level+CoreDataProperties.swift">
    </FileRef>
    <FileRef
       location = "group:DailTask.xcodeproj">

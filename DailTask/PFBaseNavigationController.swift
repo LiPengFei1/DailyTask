@@ -21,8 +21,16 @@ class PFBaseNavigationController: UINavigationController {
         attributes.setObject(UIColor.gray, forKey: NSForegroundColorAttributeName as NSCopying)
         navBar.titleTextAttributes = attributes.copy() as? [String : AnyObject]
         
-        navBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
-        navBar.backgroundColor = UIColor.clear
+        // 绘制图片
+        let rect = CGRect(x: 0, y: 0, width: 10, height: 10)
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()
+        context?.setFillColor(BGCOLOR.cgColor)
+        context?.fill(rect)
+        let img:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        
+        navBar.setBackgroundImage(img, for: .any, barMetrics: .default)
         //去掉导航下面的线
         navBar.shadowImage = UIImage()
     }

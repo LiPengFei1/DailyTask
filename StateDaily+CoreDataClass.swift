@@ -1,5 +1,5 @@
 //
-//  Level+CoreDataClass.swift
+//  StateDaily+CoreDataClass.swift
 //  
 //
 //  Created by 李鹏飞 on 16/11/18.
@@ -10,7 +10,7 @@
 import Foundation
 import CoreData
 
-@objc(Level)
-public class Level: NSManagedObject {
+@objc(StateDaily)
+public class StateDaily: NSManagedObject {
 
 }
