@@ -8,17 +8,22 @@
 
 import UIKit
 
+//闭包
+typealias FinishBlock = (IndexPath)->Void
+
 class PFTaskCollectionViewCell: UICollectionViewCell {
     
+    var finishedBlock:FinishBlock? = nil
+    var indexPath:IndexPath?
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setupUI()
     }
     
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     func addAnimationToShapeLayer(layer:CAShapeLayer,keyPath:String,fromValue:CGFloat,toValue:CGFloat,duration:TimeInterval){
         
@@ -88,6 +93,9 @@ class PFTaskCollectionViewCell: UICollectionViewCell {
     
     func clickFinish(button:UIButton){
         button.backgroundColor = UIColor.lightGray
+        if self.finishedBlock != nil {
+            self.finishedBlock!(self.indexPath!)
+        }
     }
     
     //懒加载

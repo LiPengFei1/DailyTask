@@ -24,11 +24,7 @@ extension TaskExt{
     }
     static func getTaskExtById(taskExtId:String) ->TaskExt{
         // 取
-//        let fetRequest:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest<NSFetchRequestResult>()
         let fetRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "TaskExt")
-        
-        // 查询 对象
-//        fetRequest.entity = NSEntityDescription.entity(forEntityName: "TaskExt", in: context)
         // 查询条件
         // 注意: 查询的时候如果是字符串类型的参数需要使用单引号 ‘’
         fetRequest.predicate = NSPredicate(format: "extId = '\(taskExtId)'")

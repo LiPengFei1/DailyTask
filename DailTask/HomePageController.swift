@@ -36,9 +36,9 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         let sort:NSSortDescriptor = NSSortDescriptor(key: "state.create_date", ascending: false)
         request.sortDescriptors = [sort]
         do{
-            let objects:[NSManagedObject] = try context.fetch(request) as! [NSManagedObject]
-            print(objects)
-            self.taskArray = objects
+            self.taskArray = try context.fetch(request) as! [NSManagedObject]
+//            print(objects)
+//             = objects
             self.collectionView.reloadData()
         }catch let error{
             print(error)
@@ -52,15 +52,15 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         // 查询 对象
         fetRequest.entity = NSEntityDescription.entity(forEntityName: "TaskExt", in: context)
         // 查询条件
-        fetRequest.predicate = NSPredicate(format: "state.isDone = false")
+//        fetRequest.predicate = NSPredicate(format: "state.isDone = false")
         // 按时间排序
         let sort:NSSortDescriptor = NSSortDescriptor(key: "state.create_date", ascending: false)
         fetRequest.sortDescriptors = [sort]
         // 查询结果
-        var objects:[NSManagedObject] = []
+//        var objects:[NSManagedObject] = []
         do{
-            objects = try context.fetch(fetRequest) as! [NSManagedObject]
-            self.taskArray = objects
+            self.taskArray = try context.fetch(fetRequest) as! [NSManagedObject]
+//            self.taskArray = objects
             self.collectionView.reloadData()
         }catch let error{
             print(error)
@@ -99,6 +99,11 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
             item.layer.cornerRadius = 3.0
             item.layer.masksToBounds = true
             item.titleLabel.text = dailyTask.taskName
+            item.indexPath = indexPath
+//            item.finishBtn.addTarget(self, action: #selector(), for: .touchUpInside)
+            item.finishedBlock = { (indexPath) in
+                self.finishedTask(indexPath: indexPath)
+            }
             var date:NSDate = NSDate()
             if ((dailyTask.state?.create_date) != nil) {
                 date = (dailyTask.state?.create_date)!
@@ -108,14 +113,18 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
                 item.timeLabel.text = dateString
             }
             item.contentLabel.text = dailyTask.content
+            item.finishBtn.isSelected = (dailyTask.state?.isDone)!
+            
             return item
         }else{
             let taskExt:TaskExt = taskArray![indexPath.row] as! TaskExt
             let  item:PFTaskCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "ID", for: indexPath) as! PFTaskCollectionViewCell
             item.layer.cornerRadius = 3.0
             item.layer.masksToBounds = true
+            item.indexPath = indexPath
             item.titleLabel.text = taskExt.extName
             item.contentLabel.text = taskExt.extDescription
+            item.finishBtn.isSelected = (taskExt.state?.isDone)!
             var date:NSDate = NSDate()
             if ((taskExt.state?.create_date) != nil) {
                 date = (taskExt.state?.create_date)!
@@ -124,8 +133,24 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
                 let dateString = timeFormat.string(from: date as Date)
                 item.timeLabel.text = dateString
             }
+            item.finishedBlock = { (indexPath) in
+                self.finishedTask(indexPath: indexPath)
+            }
             return item
         }
+    }
+    func finishedTask(indexPath:IndexPath){
+        //完成任务
+        //1.获取任务ID 知道是哪个任务完成了
+        if isPush{
+        }else{
+            let taskExt:TaskExt = self.taskArray![indexPath.row] as! TaskExt
+            taskExt.state?.finish_date = NSDate()
+            taskExt.state?.isDone = true
+            try! context.save()
+        }
+        //2.修改任务状态信息
+        //3.刷新数据
     }
     
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -133,18 +158,18 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
 //    }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        if isPush {
+        if isPush {
         
-//        }else{
+        }else{
             let taskExt:TaskExt = taskArray![indexPath.row] as! TaskExt
-//            if (taskExt.dailyTasks?.count)! > 0 {
+            if (taskExt.dailyTasks?.count)! > 0 {
                 let childController:HomePageController = HomePageController()
                 childController.isPush = true
                 childController.taskExtId = taskExt.extId!
                 childController.taskExt = taskExt
                 self.navigationController?.pushViewController(childController, animated: true)
-//            }
-//        }
+            }
+        }
     }
     
     func addNewTask(){
