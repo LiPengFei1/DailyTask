@@ -62,12 +62,6 @@ class PFTaskCollectionViewCell: UICollectionViewCell {
             make.height.equalTo(44)
         }
         
-        titleView.addSubview(timeLabel)
-        timeLabel.snp.makeConstraints { (make) in
-            make.right.equalTo(titleView).offset(-12)
-            make.centerY.equalTo(titleLabel).offset(0)
-        }
-        
         titleView.addSubview(finishBtn)
         finishBtn.snp.makeConstraints { (make) in
             make.right.equalTo(titleView).offset(-12)
@@ -80,8 +74,15 @@ class PFTaskCollectionViewCell: UICollectionViewCell {
         contentLabel.snp.makeConstraints { (make) in
             make.left.equalTo(titleView).offset(12)
             make.right.equalTo(titleView).offset(-12)
-            make.bottom.equalTo(titleView).offset(-12)
+//            make.bottom.equalTo(titleView).offset(-12)
             make.top.equalTo(titleView).offset(56)
+        }
+        
+        titleView.addSubview(timeLabel)
+        timeLabel.snp.makeConstraints { (make) in
+            make.right.equalTo(titleView).offset(-12)
+//            make.centerY.equalTo(titleLabel).offset(0)
+            make.bottom.equalTo(titleView.snp.bottom).offset(-10)
         }
     }
     
@@ -92,7 +93,6 @@ class PFTaskCollectionViewCell: UICollectionViewCell {
     //懒加载
     lazy var titleView:UIView = {
         let titleView:UIView = UIView()
-//        titleView.backgroundColor = UIColor(colorLiteralRed: 246.0 / 255.0, green: 246.0 / 255.0, blue: 246.0 / 255.0, alpha: 1.0)
         titleView.backgroundColor = UIColor.white
         return titleView
     }()
@@ -126,8 +126,6 @@ class PFTaskCollectionViewCell: UICollectionViewCell {
     
     lazy var finishBtn:UIButton = {
         let button:UIButton = UIButton()
-        button.isHidden = true
-//        button.setTitle("完成", for: .normal)
         button.setTitleColor(UIColor.orange, for: .normal)
         button.backgroundColor = UIColor.orange
         button.layer.cornerRadius = 10

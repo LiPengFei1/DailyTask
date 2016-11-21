@@ -2,7 +2,7 @@
 //  StateDaily+CoreDataProperties.swift
 //  
 //
-//  Created by 李鹏飞 on 16/11/18.
+//  Created by 李鹏飞 on 16/11/21.
 //
 //  This file was automatically generated and should not be edited.
 //
@@ -17,10 +17,12 @@ extension StateDaily {
         return NSFetchRequest<StateDaily>(entityName: "StateDaily");
     }
 
+    @NSManaged public var create_date: NSDate?
     @NSManaged public var finish_date: NSDate?
     @NSManaged public var isDone: Bool
     @NSManaged public var taskId: String?
-    @NSManaged public var create_date: NSDate?
+    @NSManaged public var stateId: String?
     @NSManaged public var state: TaskExt?
+    @NSManaged public var dailyState: DailyTask?
 
 }

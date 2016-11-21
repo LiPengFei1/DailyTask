@@ -2,13 +2,11 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11542" systemVersion="15G31" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="DailyTask" representedClassName="DailyTask" syncable="YES" codeGenerationType="class">
         <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="count" optional="YES" attributeType="Integer 32" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="create_Time" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="end_Time" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="extId" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="isDone" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="finishedCount" optional="YES" attributeType="Integer 32" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="taskId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="taskName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="state" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StateDaily" inverseName="dailyState" inverseEntity="StateDaily" syncable="YES"/>
         <relationship name="taskExt" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TaskExt" inverseName="dailyTasks" inverseEntity="TaskExt" syncable="YES"/>
     </entity>
     <entity name="Level" representedClassName="Level" syncable="YES" codeGenerationType="class">
@@ -19,7 +17,9 @@
         <attribute name="create_date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="finish_date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="isDone" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="stateId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="taskId" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="dailyState" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DailyTask" inverseName="state" inverseEntity="DailyTask" syncable="YES"/>
         <relationship name="state" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="TaskExt" inverseName="state" inverseEntity="TaskExt" syncable="YES"/>
     </entity>
     <entity name="TaskExt" representedClassName="TaskExt" syncable="YES" codeGenerationType="class">
@@ -31,9 +31,9 @@
         <relationship name="state" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="StateDaily" inverseName="state" inverseEntity="StateDaily" syncable="YES"/>
     </entity>
     <elements>
-        <element name="StateDaily" positionX="-180" positionY="63" width="128" height="118"/>
+        <element name="DailyTask" positionX="-135" positionY="-162" width="128" height="30"/>
         <element name="Level" positionX="-605" positionY="99" width="128" height="75"/>
-        <element name="DailyTask" positionX="-135" positionY="-162" width="128" height="178"/>
+        <element name="StateDaily" positionX="-180" positionY="63" width="128" height="30"/>
         <element name="TaskExt" positionX="-405" positionY="-135" width="128" height="28"/>
     </elements>
 </model>

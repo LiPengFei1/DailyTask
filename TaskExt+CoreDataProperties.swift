@@ -2,7 +2,7 @@
 //  TaskExt+CoreDataProperties.swift
 //  
 //
-//  Created by 李鹏飞 on 16/11/18.
+//  Created by 李鹏飞 on 16/11/21.
 //
 //  This file was automatically generated and should not be edited.
 //
@@ -17,10 +17,10 @@ extension TaskExt {
         return NSFetchRequest<TaskExt>(entityName: "TaskExt");
     }
 
+    @NSManaged public var extDescription: String?
     @NSManaged public var extId: String?
     @NSManaged public var extName: String?
     @NSManaged public var levelId: String?
-    @NSManaged public var extDescription: String?
     @NSManaged public var dailyTasks: NSSet?
     @NSManaged public var state: StateDaily?
 

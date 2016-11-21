@@ -2,7 +2,7 @@
 //  DailyTask+CoreDataProperties.swift
 //  
 //
-//  Created by 李鹏飞 on 16/11/18.
+//  Created by 李鹏飞 on 16/11/21.
 //
 //  This file was automatically generated and should not be edited.
 //
@@ -18,13 +18,11 @@ extension DailyTask {
     }
 
     @NSManaged public var content: String?
-    @NSManaged public var count: Int32
-    @NSManaged public var create_Time: NSDate?
-    @NSManaged public var end_Time: NSDate?
+    @NSManaged public var finishedCount: Int32
     @NSManaged public var extId: String?
     @NSManaged public var taskId: String?
     @NSManaged public var taskName: String?
-    @NSManaged public var isDone: Bool
     @NSManaged public var taskExt: TaskExt?
+    @NSManaged public var state: StateDaily?
 
 }

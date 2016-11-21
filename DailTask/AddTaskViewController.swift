@@ -10,6 +10,8 @@ import UIKit
 
 class AddTaskViewController: UIViewController {
     
+    var taskExtId = ""
+    var taskExt:TaskExt?
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
@@ -19,7 +21,6 @@ class AddTaskViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = BGCOLOR
         self.setupUI()
-        
     }
 
     func setupUI(){
@@ -71,14 +72,38 @@ class AddTaskViewController: UIViewController {
     }
     
     func saveTask(){
-        let taskExt = TaskExt.newTaskExt()
-        taskExt.extName = self.titleField.text?.trimmingCharacters(in: CharacterSet())
-        taskExt.extDescription = self.contentView.text.trimmingCharacters(in: CharacterSet())
-        let b = taskExt.insertTaskExtToData()
-        if b {
-            print("保存成功")
+        // 验证是否为空
+        let name = self.titleField.text?.trimmingCharacters(in: CharacterSet())
+        let content = self.contentView.text.trimmingCharacters(in: CharacterSet())
+        
+        if taskExtId.isEmpty {
+            if !(name?.isEmpty)! && !content.isEmpty  {
+                let taskExt = TaskExt.newTaskExt()
+                taskExt.extName = name
+                taskExt.extDescription = content
+                let b = taskExt.insertTaskExtToData()
+                if b {
+                    print("保存成功")
+                }else{
+                    print("保存失败")
+                }
+            }else{
+                print("空")
+            }
         }else{
-            print("保存失败")
+            if !(name?.isEmpty)! && !content.isEmpty  {
+                let taskExt = TaskExt.getTaskExtById(taskExtId: taskExtId)
+//                let taskExt = self.taskExt
+                let b = taskExt.insertDailyTaskToData(taskName: name!, content: content)
+                if b {
+                    print("保存成功")
+                }else{
+                    print("保存失败")
+                }
+
+            }else{
+                print("空")
+            }
         }
     }
 
@@ -94,11 +119,13 @@ class AddTaskViewController: UIViewController {
         let textField:UITextField = UITextField()
         textField.borderStyle = UITextBorderStyle.roundedRect
         textField.placeholder = "请输入标题"
+        textField.font = UIFont.systemFont(ofSize: 14.0)
         return textField
     }()
     
     lazy var contentView:UITextView = {
         let textView = UITextView()
+        textView.font = UIFont.systemFont(ofSize: 14.0)
         textView.layer.borderColor = BGCOLOR.cgColor
         textView.layer.borderWidth = 2.0
         return textView

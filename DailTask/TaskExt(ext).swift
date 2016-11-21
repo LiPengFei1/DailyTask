@@ -22,14 +22,68 @@ extension TaskExt{
         let task:TaskExt = NSEntityDescription.insertNewObject(forEntityName: "TaskExt", into: context) as! TaskExt
         return task
     }
+    static func getTaskExtById(taskExtId:String) ->TaskExt{
+        // 取
+//        let fetRequest:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest<NSFetchRequestResult>()
+        let fetRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "TaskExt")
+        
+        // 查询 对象
+//        fetRequest.entity = NSEntityDescription.entity(forEntityName: "TaskExt", in: context)
+        // 查询条件
+        // 注意: 查询的时候如果是字符串类型的参数需要使用单引号 ‘’
+        fetRequest.predicate = NSPredicate(format: "extId = '\(taskExtId)'")
+        // 查询结果
+        var objects:[NSManagedObject] = []
+        do{
+            objects = try context.fetch(fetRequest) as! [NSManagedObject]
+            print(objects)
+        }catch let error{
+            print(error)
+        }
+        return objects.first as! TaskExt
+    }
+    
+    func insertDailyTaskToData(taskName:String,content:String) ->Bool{
+        let dailyTaskId = self.getId().appending("02")
+        // 插入状态
+        let state = NSEntityDescription.insertNewObject(forEntityName: "StateDaily", into: context) as! StateDaily
+        state.stateId = self.getId().appending("03")
+        state.taskId = dailyTaskId
+        state.isDone = false
+        state.create_date = NSDate()
+        
+        
+        let dailyTask = NSEntityDescription.insertNewObject(forEntityName: "DailyTask", into: context) as! DailyTask
+        dailyTask.taskId = dailyTaskId
+        dailyTask.taskName = taskName
+        dailyTask.content = content
+        dailyTask.extId = self.extId
+        dailyTask.finishedCount = 0
+        self.addToDailyTasks(dailyTask)
+        // 插入数据之后一定要调用save()方法保存到数据库中
+        do{
+            try context.save()
+            return true
+            //success
+        }catch let error{
+            print(error)
+            return false
+        }
+
+        
+    }
+    
     // 插入数据
     func insertTaskExtToData() ->Bool{
+        // ID 结尾 01:TaskExtId  02: DailyTaskId  03:StateDilayId
         // 根据时间自动生成extId
-        self.extId = self.getId()
+        self.extId = self.getId().appending("01")
         // 创建一个新的任务的同时 也为这个任务创建一个状态
         let state = NSEntityDescription.insertNewObject(forEntityName: "StateDaily", into: context) as! StateDaily
-        state.isDone = false
         state.taskId = self.extId
+        state.stateId = self.getId().appending("03")
+        state.isDone = false
+        
         state.create_date = NSDate()
         self.state = state
         do{
@@ -67,8 +121,6 @@ extension TaskExt{
             for task in taskExt as! [TaskExt]{
                 print(task.dailyTasks!)
             }
-            
-            
         }catch let error{
             print(error)
         }
