@@ -147,7 +147,7 @@ class PFTaskCollectionViewCell: UICollectionViewCell {
     lazy var contentLabel:UILabel = {
         let label:UILabel = UILabel()
         label.text = "这里都是一些非常有意思的内容，看看有没有你喜欢的。"
-        label.font = UIFont.systemFont(ofSize: 12.0)
+        label.font = UIFont.systemFont(ofSize: 14.0)
         label.textAlignment = NSTextAlignment.center
         label.numberOfLines = 0
         return label

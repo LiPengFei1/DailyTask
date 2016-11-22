@@ -16,14 +16,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
+        // 保存登录信息 ，保存登录上次登录时间
+        // 如果本次和上次登录时间不是同一天，说明这是第二天之后，充值任务，即可保证每天登录都可以将任务重置为初始状态
+        // 使用账户登录，指纹登录
         // 1.初始化window
         self.window = UIWindow(frame:UIScreen.main.bounds)
         // 2.设置rootController
-        let mainController = HomePageController()
-        let navController:PFBaseNavigationController = PFBaseNavigationController(rootViewController: mainController)
-        self.window?.rootViewController = navController
+        let mainController = LoginViewController()
+//        let navController:PFBaseNavigationController = PFBaseNavigationController(rootViewController: mainController)
+        
+        //添加通知
+        NotificationCenter.default.addObserver(self, selector: #selector(changeRootViewController), name: NSNotification.Name(rawValue: "changeRootViewController"), object: nil)
+        
+        self.window?.rootViewController = mainController
         self.window?.makeKeyAndVisible()
         return true
+    }
+    
+    func changeRootViewController(){
+        // 2.设置rootController
+        
+        DispatchQueue.main.async {
+            let mainController = HomePageController()
+            let navController:PFBaseNavigationController = PFBaseNavigationController(rootViewController: mainController)
+            self.window?.rootViewController = navController
+            self.window?.makeKeyAndVisible()
+        }
+        
+
+
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -31,9 +53,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     }
 
+    var enterBackground:Bool = false
     func applicationDidEnterBackground(_ application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        //进入后台的代理方法
+        enterBackground = true
+        DispatchQueue.main.async {
+            let mainController = LoginViewController()
+            //                let navController:PFBaseNavigationController = PFBaseNavigationController(rootViewController: mainController)
+            self.window?.rootViewController = mainController
+        }
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -41,7 +69,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        // 启动程序时会调用两次
+        // 从后台进入前台会调用一次
+        if enterBackground {
+            
+            
+        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

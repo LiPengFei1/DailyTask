@@ -20,16 +20,9 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         super.viewDidLoad()
         self.setNavBarButton()
         view.addSubview(collectionView)
-        collectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(view).offset(0)
-            make.left.equalTo(view).offset(0)
-            make.right.equalTo(view).offset(0)
-            make.bottom.equalTo(view).offset(0)
-        }
-        
-        
         collectionView.register(PFTaskCollectionViewCell.classForCoder(), forCellWithReuseIdentifier: "ID")
         collectionView.register(CollectionReusableView.classForCoder(), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "head")
+        
         if isPush {
             self.loadDataByTaskExtId(taskId: taskExtId)
         }else{
@@ -110,6 +103,10 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         let item:PFTaskCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "ID", for: indexPath) as! PFTaskCollectionViewCell
         item.layer.cornerRadius = 3.0
         item.layer.masksToBounds = true
+        item.layer.borderColor = UIColor.orange.cgColor
+        item.layer.borderWidth = 0.2
+        item.alpha = 0.9
+        
         item.indexPath = indexPath
         item.finishedBlock = { (btn,indexPath) in
             self.finishedTask(btn: btn,indexPath: indexPath)
@@ -204,11 +201,11 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
             
         }else{
             let taskExt:TaskExt = taskArray![indexPath.row] as! TaskExt
-            
-                let childController:HomePageController = HomePageController()
-                childController.isPush = true
-                childController.taskExtId = taskExt.extId!
-                childController.taskExt = taskExt
+            let childController:HomePageController = HomePageController()
+            childController.isPush = true
+            childController.taskExtId = taskExt.extId!
+            childController.taskExt = taskExt
+            childController.title = "目标"
                 self.navigationController?.pushViewController(childController, animated: true)
         }
     }
@@ -252,6 +249,7 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         collection.bounces = true
         // 当界面内容不超过界面大小时不会滑动，加上面这句话就能滑动了 
         collection.alwaysBounceVertical = true
+        collection.backgroundView = UIImageView(image: UIImage(named: "sea"))
         return collection
         
     }()
