@@ -30,6 +30,8 @@ class LoginViewController: UIViewController {
         if myContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: error as! NSErrorPointer) {
             myContext.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: "按手印吧", reply: { (success, err) in
                 if success{
+                    // 记录登录信息j
+                    self.saveLoginMessage()
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "changeRootViewController"), object: nil)
                 }else{
                     print(err as Any)
@@ -38,6 +40,10 @@ class LoginViewController: UIViewController {
         }else{
             print(error as Any)
         }
+    }
+    
+    func saveLoginMessage(){
+        
     }
     
 
