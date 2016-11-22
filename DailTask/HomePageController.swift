@@ -30,6 +30,7 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
     }
     
     func loadDataByTaskExtId(taskId:String){
+        
         let request:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest<NSFetchRequestResult>()
         request.entity = NSEntityDescription.entity(forEntityName: "DailyTask", in: context)
         request.predicate = NSPredicate(format: "(extId = '\(taskExtId)')")
@@ -37,8 +38,6 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         request.sortDescriptors = [sort]
         do{
             self.taskArray = try context.fetch(request) as! [NSManagedObject]
-//            print(objects)
-//             = objects
             self.collectionView.reloadData()
         }catch let error{
             print(error)
@@ -51,16 +50,14 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         let fetRequest:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest<NSFetchRequestResult>()
         // 查询 对象
         fetRequest.entity = NSEntityDescription.entity(forEntityName: "TaskExt", in: context)
-        // 查询条件
+        // 查询条件,不设置查询条件 会查询所有
 //        fetRequest.predicate = NSPredicate(format: "state.isDone = false")
         // 按时间排序
         let sort:NSSortDescriptor = NSSortDescriptor(key: "state.create_date", ascending: false)
         fetRequest.sortDescriptors = [sort]
         // 查询结果
-//        var objects:[NSManagedObject] = []
         do{
             self.taskArray = try context.fetch(fetRequest) as! [NSManagedObject]
-//            self.taskArray = objects
             self.collectionView.reloadData()
         }catch let error{
             print(error)
@@ -93,51 +90,41 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+       
+        let item:PFTaskCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "ID", for: indexPath) as! PFTaskCollectionViewCell
+        item.layer.cornerRadius = 3.0
+        item.layer.masksToBounds = true
+        item.indexPath = indexPath
+        item.finishedBlock = { (indexPath) in
+            self.finishedTask(indexPath: indexPath)
+        }
+        var date:NSDate = NSDate()
         if isPush {
             let dailyTask:DailyTask = taskArray![indexPath.row] as! DailyTask
-            let item:PFTaskCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "ID", for: indexPath) as! PFTaskCollectionViewCell
-            item.layer.cornerRadius = 3.0
-            item.layer.masksToBounds = true
             item.titleLabel.text = dailyTask.taskName
-            item.indexPath = indexPath
-//            item.finishBtn.addTarget(self, action: #selector(), for: .touchUpInside)
-            item.finishedBlock = { (indexPath) in
-                self.finishedTask(indexPath: indexPath)
-            }
-            var date:NSDate = NSDate()
             if ((dailyTask.state?.create_date) != nil) {
-                date = (dailyTask.state?.create_date)!
-                let timeFormat = DateFormatter()
-                timeFormat.dateFormat = "yyyy.MM.dd"
-                let dateString = timeFormat.string(from: date as Date)
-                item.timeLabel.text = dateString
+                if dailyTask.state!.isDone{
+                    item.finishBtn.backgroundColor = UIColor.gray
+                }
             }
             item.contentLabel.text = dailyTask.content
-            item.finishBtn.isSelected = (dailyTask.state?.isDone)!
-            
-            return item
         }else{
             let taskExt:TaskExt = taskArray![indexPath.row] as! TaskExt
-            let  item:PFTaskCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "ID", for: indexPath) as! PFTaskCollectionViewCell
-            item.layer.cornerRadius = 3.0
-            item.layer.masksToBounds = true
-            item.indexPath = indexPath
             item.titleLabel.text = taskExt.extName
             item.contentLabel.text = taskExt.extDescription
-            item.finishBtn.isSelected = (taskExt.state?.isDone)!
-            var date:NSDate = NSDate()
-            if ((taskExt.state?.create_date) != nil) {
+            if ((taskExt.state?.create_date) != nil) {                
                 date = (taskExt.state?.create_date)!
-                let timeFormat = DateFormatter()
-                timeFormat.dateFormat = "yyyy.MM.dd"
-                let dateString = timeFormat.string(from: date as Date)
-                item.timeLabel.text = dateString
+                if taskExt.state!.isDone{
+                    item.finishBtn.backgroundColor = UIColor.gray
+                }
+                print("indexPath.row = \(indexPath.row),BOOL  = \(taskExt.state!.isDone)")
             }
-            item.finishedBlock = { (indexPath) in
-                self.finishedTask(indexPath: indexPath)
-            }
-            return item
         }
+        let timeFormat = DateFormatter()
+        timeFormat.dateFormat = "yyyy.MM.dd"
+        let dateString = timeFormat.string(from: date as Date)
+        item.timeLabel.text = dateString
+        return item
     }
     func finishedTask(indexPath:IndexPath){
         //完成任务
@@ -147,9 +134,14 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
             let taskExt:TaskExt = self.taskArray![indexPath.row] as! TaskExt
             taskExt.state?.finish_date = NSDate()
             taskExt.state?.isDone = true
-            try! context.save()
+            do{
+                try context.save()
+            }catch let error{
+                print(error)
+            }
         }
         //2.修改任务状态信息
+        
         //3.刷新数据
     }
     

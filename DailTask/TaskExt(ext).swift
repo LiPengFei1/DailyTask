@@ -55,6 +55,7 @@ extension TaskExt{
         dailyTask.content = content
         dailyTask.extId = self.extId
         dailyTask.finishedCount = 0
+        dailyTask.state = state
         self.addToDailyTasks(dailyTask)
         // 插入数据之后一定要调用save()方法保存到数据库中
         do{
