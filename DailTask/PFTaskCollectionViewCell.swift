@@ -9,7 +9,7 @@
 import UIKit
 
 //闭包
-typealias FinishBlock = (IndexPath)->Void
+typealias FinishBlock = (UIButton,IndexPath)->Void
 
 class PFTaskCollectionViewCell: UICollectionViewCell {
     
@@ -67,6 +67,12 @@ class PFTaskCollectionViewCell: UICollectionViewCell {
             make.height.equalTo(44)
         }
         
+        titleView.addSubview(countLabel)
+        countLabel.snp.makeConstraints { (make) in
+            make.left.equalTo(titleLabel.snp.right).offset(12)
+            make.centerY.equalTo(titleLabel).offset(0)
+        }
+        
         titleView.addSubview(finishBtn)
         finishBtn.snp.makeConstraints { (make) in
             make.right.equalTo(titleView).offset(-12)
@@ -75,12 +81,24 @@ class PFTaskCollectionViewCell: UICollectionViewCell {
             make.height.equalTo(20)
         }
         
-        titleView.addSubview(contentLabel)
+        let bottomView:UIView = UIView()
+        bottomView.backgroundColor = UIColor.white
+        titleView.addSubview(bottomView)
+        bottomView.snp.makeConstraints { (make) in
+            make.top.equalTo(titleView).offset(56)
+            make.left.equalTo(titleView).offset(12)
+            make.right.equalTo(titleView).offset(-12)
+            make.bottom.equalTo(titleView).offset(-12)
+        }
+        
+        bottomView.addSubview(contentLabel)
         contentLabel.snp.makeConstraints { (make) in
             make.left.equalTo(titleView).offset(12)
             make.right.equalTo(titleView).offset(-12)
 //            make.bottom.equalTo(titleView).offset(-12)
-            make.top.equalTo(titleView).offset(56)
+//            make.top.equalTo(titleView).offset(56)
+//            make.centerX.equalTo(bottomView.snp.centerX).offset(0)
+            make.centerY.equalTo(bottomView.snp.centerY).offset(0)
         }
         
         titleView.addSubview(timeLabel)
@@ -92,9 +110,10 @@ class PFTaskCollectionViewCell: UICollectionViewCell {
     }
     
     func clickFinish(button:UIButton){
-        button.backgroundColor = UIColor.lightGray
+//        button.backgroundColor = UIColor.lightGray
         if self.finishedBlock != nil {
-            self.finishedBlock!(self.indexPath!)
+//            self.finishedBlock!(button,self)
+            self.finishedBlock!(button,self.indexPath!)
         }
     }
     
@@ -111,6 +130,13 @@ class PFTaskCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    lazy var countLabel:PFLabel = {
+        let label:PFLabel = PFLabel(text: "", font: UIFont.systemFont(ofSize: 12.0))
+        label.textColor = UIColor(white: 0, alpha: 0.4)
+        label.textAlignment = NSTextAlignment.left
+        return label
+    }()
+    
     lazy var timeLabel:PFLabel = {
         let label:PFLabel = PFLabel(text: "2016.11.18", font: UIFont.systemFont(ofSize: 12.0))
         label.textColor = UIColor(white: 0, alpha: 0.4)
@@ -122,7 +148,7 @@ class PFTaskCollectionViewCell: UICollectionViewCell {
         let label:UILabel = UILabel()
         label.text = "这里都是一些非常有意思的内容，看看有没有你喜欢的。"
         label.font = UIFont.systemFont(ofSize: 12.0)
-        label.textAlignment = NSTextAlignment.left
+        label.textAlignment = NSTextAlignment.center
         label.numberOfLines = 0
         return label
     }()

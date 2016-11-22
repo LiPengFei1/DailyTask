@@ -2,7 +2,7 @@
 //  TaskExt+CoreDataProperties.swift
 //  
 //
-//  Created by 李鹏飞 on 16/11/21.
+//  Created by 李鹏飞 on 16/11/22.
 //
 //  This file was automatically generated and should not be edited.
 //
@@ -21,6 +21,7 @@ extension TaskExt {
     @NSManaged public var extId: String?
     @NSManaged public var extName: String?
     @NSManaged public var levelId: String?
+    @NSManaged public var finishedCount: Int32
     @NSManaged public var dailyTasks: NSSet?
     @NSManaged public var state: StateDaily?
 

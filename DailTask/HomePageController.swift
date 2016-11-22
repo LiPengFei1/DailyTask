@@ -20,6 +20,14 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         super.viewDidLoad()
         self.setNavBarButton()
         view.addSubview(collectionView)
+        collectionView.snp.makeConstraints { (make) in
+            make.top.equalTo(view).offset(0)
+            make.left.equalTo(view).offset(0)
+            make.right.equalTo(view).offset(0)
+            make.bottom.equalTo(view).offset(0)
+        }
+        
+        
         collectionView.register(PFTaskCollectionViewCell.classForCoder(), forCellWithReuseIdentifier: "ID")
         collectionView.register(CollectionReusableView.classForCoder(), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "head")
         if isPush {
@@ -27,6 +35,7 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         }else{
             self.loadData()
         }
+        NotificationCenter.default.addObserver(self, selector: #selector(loadNewData), name: NSNotification.Name(rawValue: "loadNewDataSource"), object: nil)
     }
     
     func loadDataByTaskExtId(taskId:String){
@@ -41,6 +50,13 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
             self.collectionView.reloadData()
         }catch let error{
             print(error)
+        }
+    }
+    func loadNewData(){
+        if isPush {
+            self.loadDataByTaskExtId(taskId: taskExtId)
+        }else{
+            self.loadData()
         }
     }
     
@@ -95,8 +111,8 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         item.layer.cornerRadius = 3.0
         item.layer.masksToBounds = true
         item.indexPath = indexPath
-        item.finishedBlock = { (indexPath) in
-            self.finishedTask(indexPath: indexPath)
+        item.finishedBlock = { (btn,indexPath) in
+            self.finishedTask(btn: btn,indexPath: indexPath)
         }
         var date:NSDate = NSDate()
         if isPush {
@@ -105,6 +121,8 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
             if ((dailyTask.state?.create_date) != nil) {
                 if dailyTask.state!.isDone{
                     item.finishBtn.backgroundColor = UIColor.gray
+                }else{
+                    item.finishBtn.backgroundColor = UIColor.orange
                 }
             }
             item.contentLabel.text = dailyTask.content
@@ -112,12 +130,20 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
             let taskExt:TaskExt = taskArray![indexPath.row] as! TaskExt
             item.titleLabel.text = taskExt.extName
             item.contentLabel.text = taskExt.extDescription
+            
             if ((taskExt.state?.create_date) != nil) {                
                 date = (taskExt.state?.create_date)!
                 if taskExt.state!.isDone{
                     item.finishBtn.backgroundColor = UIColor.gray
+                }else{
+                    item.finishBtn.backgroundColor = UIColor.orange
                 }
-                print("indexPath.row = \(indexPath.row),BOOL  = \(taskExt.state!.isDone)")
+            }
+            
+            if taskExt.dailyTasks!.count > 0 {
+                item.countLabel.text = "\(taskExt.finishedCount)/\(taskExt.dailyTasks!.count)"
+            }else{
+                item.countLabel.text = ""
             }
         }
         let timeFormat = DateFormatter()
@@ -126,22 +152,46 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         item.timeLabel.text = dateString
         return item
     }
-    func finishedTask(indexPath:IndexPath){
+    func finishedTask(btn:UIButton,indexPath:IndexPath){
         //完成任务
         //1.获取任务ID 知道是哪个任务完成了
         if isPush{
-        }else{
-            let taskExt:TaskExt = self.taskArray![indexPath.row] as! TaskExt
-            taskExt.state?.finish_date = NSDate()
-            taskExt.state?.isDone = true
+            let dailyTask:DailyTask = self.taskArray![indexPath.row] as! DailyTask
+            dailyTask.state?.finish_date = NSDate()
+            dailyTask.state?.isDone = true
+            dailyTask.taskExt?.finishedCount += 1
+            let taskExt:TaskExt = dailyTask.taskExt!
+            if intmax_t( taskExt.finishedCount) == taskExt.dailyTasks!.count {
+                //说明任务全部完成了
+                taskExt.state?.finish_date = NSDate()
+                taskExt.state?.isDone = true
+            }
             do{
                 try context.save()
+                btn.backgroundColor = UIColor.gray
+                // 发送一条通知,更新首页数据
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "loadNewDataSource"), object: nil)
             }catch let error{
                 print(error)
             }
+        }else{
+            //完成任务之前 先检查子任务是否都完成，如果全部完成，才能完成这个任务
+            let taskExt:TaskExt = self.taskArray![indexPath.row] as! TaskExt
+            if taskExt.dailyTasks!.count == intmax_t(taskExt.finishedCount)
+            {
+                taskExt.state?.finish_date = NSDate()
+                taskExt.state?.isDone = true
+                btn.backgroundColor = UIColor.gray
+                do{
+                    try context.save()
+                }catch let error{
+                    print(error)
+                }
+            }else{
+                //提示未完成子任务连接
+                print("请先完成子任务")
+            }
         }
-        //2.修改任务状态信息
-        
         //3.刷新数据
     }
     
@@ -151,16 +201,15 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if isPush {
-        
+            
         }else{
             let taskExt:TaskExt = taskArray![indexPath.row] as! TaskExt
-            if (taskExt.dailyTasks?.count)! > 0 {
+            
                 let childController:HomePageController = HomePageController()
                 childController.isPush = true
                 childController.taskExtId = taskExt.extId!
                 childController.taskExt = taskExt
                 self.navigationController?.pushViewController(childController, animated: true)
-            }
         }
     }
     
@@ -180,11 +229,12 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         // 方向
         layout.scrollDirection = UICollectionViewScrollDirection.vertical
         let width:CGFloat = (self.view.frame.size.width - 24)
-        layout.itemSize = CGSize(width: width , height: width / 3)
+        layout.itemSize = CGSize(width: width , height: width / 3 + 22)
         layout.minimumLineSpacing = 10 // 上下间距
         layout.minimumInteritemSpacing = 0 //左右间距
         layout.headerReferenceSize = CGSize(width: 375, height: 200)
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        layout.scrollDirection = .vertical
         return layout
     }()
     
@@ -196,9 +246,12 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         frame.size.height -= 64
         let collection:UICollectionView = UICollectionView(frame:frame, collectionViewLayout: self.layout)
         collection.backgroundColor = BGCOLOR
+//        collection.contentSize = self.view.bounds.size
         collection.delegate = self
         collection.dataSource = self
         collection.bounces = true
+        // 当界面内容不超过界面大小时不会滑动，加上面这句话就能滑动了 
+        collection.alwaysBounceVertical = true
         return collection
         
     }()

@@ -6,6 +6,7 @@
         <attribute name="finishedCount" optional="YES" attributeType="Integer 32" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="taskId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="taskName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="childTasks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DailyTask" inverseName="childTasks" inverseEntity="DailyTask" syncable="YES"/>
         <relationship name="state" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StateDaily" inverseName="dailyState" inverseEntity="StateDaily" syncable="YES"/>
         <relationship name="taskExt" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TaskExt" inverseName="dailyTasks" inverseEntity="TaskExt" syncable="YES"/>
     </entity>
@@ -26,14 +27,15 @@
         <attribute name="extDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="extId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="extName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="finishedCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="levelId" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="dailyTasks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DailyTask" inverseName="taskExt" inverseEntity="DailyTask" syncable="YES"/>
         <relationship name="state" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="StateDaily" inverseName="state" inverseEntity="StateDaily" syncable="YES"/>
     </entity>
     <elements>
-        <element name="DailyTask" positionX="-135" positionY="-162" width="128" height="30"/>
+        <element name="DailyTask" positionX="-135" positionY="-162" width="128" height="165"/>
         <element name="Level" positionX="-605" positionY="99" width="128" height="75"/>
         <element name="StateDaily" positionX="-180" positionY="63" width="128" height="30"/>
-        <element name="TaskExt" positionX="-405" positionY="-135" width="128" height="28"/>
+        <element name="TaskExt" positionX="-405" positionY="-135" width="128" height="30"/>
     </elements>
 </model>

@@ -2,7 +2,7 @@
 //  DailyTask+CoreDataProperties.swift
 //  
 //
-//  Created by 李鹏飞 on 16/11/21.
+//  Created by 李鹏飞 on 16/11/22.
 //
 //  This file was automatically generated and should not be edited.
 //
@@ -24,5 +24,23 @@ extension DailyTask {
     @NSManaged public var taskName: String?
     @NSManaged public var taskExt: TaskExt?
     @NSManaged public var state: StateDaily?
+    @NSManaged public var childTasks: NSSet?
+
+}
+
+// MARK: Generated accessors for childTasks
+extension DailyTask {
+
+    @objc(addChildTasksObject:)
+    @NSManaged public func addToChildTasks(_ value: DailyTask)
+
+    @objc(removeChildTasksObject:)
+    @NSManaged public func removeFromChildTasks(_ value: DailyTask)
+
+    @objc(addChildTasks:)
+    @NSManaged public func addToChildTasks(_ values: NSSet)
+
+    @objc(removeChildTasks:)
+    @NSManaged public func removeFromChildTasks(_ values: NSSet)
 
 }

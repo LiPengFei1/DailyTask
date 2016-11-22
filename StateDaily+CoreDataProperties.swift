@@ -2,7 +2,7 @@
 //  StateDaily+CoreDataProperties.swift
 //  
 //
-//  Created by 李鹏飞 on 16/11/21.
+//  Created by 李鹏飞 on 16/11/22.
 //
 //  This file was automatically generated and should not be edited.
 //

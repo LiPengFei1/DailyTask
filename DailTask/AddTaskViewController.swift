@@ -26,7 +26,7 @@ class AddTaskViewController: UIViewController {
     func setupUI(){
         view.addSubview(bgView)
         bgView.snp.makeConstraints { (make) in
-            make.top.equalTo(view).offset(114)
+            make.top.equalTo(view).offset(24)
             make.left.equalTo(view).offset(12)
             make.right.equalTo(view).offset(-12)
             make.bottom.equalTo(view).offset(-114)
@@ -81,6 +81,7 @@ class AddTaskViewController: UIViewController {
                 let taskExt = TaskExt.newTaskExt()
                 taskExt.extName = name
                 taskExt.extDescription = content
+                taskExt.finishedCount = 0
                 let b = taskExt.insertTaskExtToData()
                 if b {
                     print("保存成功")
@@ -105,6 +106,10 @@ class AddTaskViewController: UIViewController {
                 print("空")
             }
         }
+        //刷新数据
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "loadNewDataSource"), object: nil)
+        self.navigationController!.popViewController(animated: true)
+        // 提示信息
     }
 
     lazy var bgView:UIView = {
