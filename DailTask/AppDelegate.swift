@@ -17,35 +17,82 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        // 保存登录信息 ，保存登录上次登录时间
-        // 如果本次和上次登录时间不是同一天，说明这是第二天之后，充值任务，即可保证每天登录都可以将任务重置为初始状态
-        // 使用账户登录，指纹登录
         // 1.初始化window
         self.window = UIWindow(frame:UIScreen.main.bounds)
         // 2.设置rootController
         let mainController = LoginViewController()
-//        let navController:PFBaseNavigationController = PFBaseNavigationController(rootViewController: mainController)
-        
-        //添加通知
-        NotificationCenter.default.addObserver(self, selector: #selector(changeRootViewController), name: NSNotification.Name(rawValue: "changeRootViewController"), object: nil)
-        
         self.window?.rootViewController = mainController
         self.window?.makeKeyAndVisible()
+        
+        // 3.初始化数据
+        initTaskDataBase()
+        //添加通知
+        NotificationCenter.default.addObserver(self, selector: #selector(changeRootViewController), name: NSNotification.Name(rawValue: "changeRootViewController"), object: nil)
         return true
     }
     
-    func changeRootViewController(){
-        // 2.设置rootController
+    func initTaskDataBase(){
         
+        var loginUser:User?
+        // 1.通过用户名查找用户，如果用户不存在，说明是第一次登录，创建一个用户
+        let fetRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "User")
+        // 查询条件
+        // 注意: 查询的时候如果是字符串类型的参数需要使用单引号 ‘’
+        fetRequest.predicate = NSPredicate(format: "userName = 'lipengfei'")
+        // 查询结果
+        var objects:[NSManagedObject] = []
+        do{
+            objects = try context.fetch(fetRequest) as! [NSManagedObject]
+            loginUser = objects.first as? User
+            self.initTask(user: loginUser!)
+            print("查到了用户")
+        }catch let error{
+            print(error)
+        }
+    }
+    
+    func initTask(user:User){
+        //查到用户登录信息，比较时间是否为同一天
+        let oldDate = user.loginDate
+        let timeFormat = DateFormatter()
+        timeFormat.dateFormat = "yyyy.MM.dd"
+        let oldDateString = timeFormat.string(from: oldDate as! Date)
+        let newDateString = timeFormat.string(from: Date())
+        if oldDateString == newDateString{
+            // 说明是同一天
+            print("登录日期是同一天,不执行任何操作")
+        }else{
+            print("登录日期不是同一天")
+            // 重置 需要重复执行的任务
+            // 1.插入所有的重复执行的任务
+            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "TaskExt")
+            request.predicate = NSPredicate(format: "state.repeatTask = true")
+            var objects:[NSManagedObject] = []
+            do{
+                objects = try context.fetch(request) as! [NSManagedObject]
+                for obj:TaskExt in objects as! [TaskExt] {
+                    obj.finishedCount = 0
+                    obj.state?.isDone = false
+                    // 初始化子任务
+                    for dailytask:DailyTask in obj.dailyTasks?.allObjects as! [DailyTask]{
+                        dailytask.state?.isDone = false
+                    }
+                }
+            }catch let error{
+                print(error)
+            }
+        }
+    }
+    
+    func changeRootViewController(){
+        
+        // 2.设置rootController        
         DispatchQueue.main.async {
             let mainController = HomePageController()
             let navController:PFBaseNavigationController = PFBaseNavigationController(rootViewController: mainController)
             self.window?.rootViewController = navController
             self.window?.makeKeyAndVisible()
         }
-        
-
-
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

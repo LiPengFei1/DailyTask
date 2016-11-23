@@ -2,7 +2,7 @@
 //  StateDaily+CoreDataProperties.swift
 //  
 //
-//  Created by 李鹏飞 on 16/11/22.
+//  Created by 李鹏飞 on 16/11/23.
 //
 //  This file was automatically generated and should not be edited.
 //
@@ -22,6 +22,7 @@ extension StateDaily {
     @NSManaged public var isDone: Bool
     @NSManaged public var taskId: String?
     @NSManaged public var stateId: String?
+    @NSManaged public var repeatTask: Bool
     @NSManaged public var state: TaskExt?
     @NSManaged public var dailyState: DailyTask?
 

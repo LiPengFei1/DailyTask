@@ -39,7 +39,7 @@ extension TaskExt{
         return objects.first as! TaskExt
     }
     
-    func insertDailyTaskToData(taskName:String,content:String) ->Bool{
+    func insertDailyTaskToData(taskName:String,content:String,isRepeat:Bool) ->Bool{
         let dailyTaskId = self.getId().appending("02")
         // 插入状态
         let state = NSEntityDescription.insertNewObject(forEntityName: "StateDaily", into: context) as! StateDaily
@@ -47,7 +47,7 @@ extension TaskExt{
         state.taskId = dailyTaskId
         state.isDone = false
         state.create_date = NSDate()
-        
+        state.repeatTask = isRepeat
         
         let dailyTask = NSEntityDescription.insertNewObject(forEntityName: "DailyTask", into: context) as! DailyTask
         dailyTask.taskId = dailyTaskId
@@ -73,16 +73,20 @@ extension TaskExt{
     }
     
     // 插入数据
-    func insertTaskExtToData() ->Bool{
+    func insertTaskExtToData(name:String,descript:String,isRepeat:Bool) ->Bool{
         // ID 结尾 01:TaskExtId  02: DailyTaskId  03:StateDilayId
         // 根据时间自动生成extId
         self.extId = self.getId().appending("01")
+        
+        self.extName = name
+        self.extDescription = descript
+        
         // 创建一个新的任务的同时 也为这个任务创建一个状态
         let state = NSEntityDescription.insertNewObject(forEntityName: "StateDaily", into: context) as! StateDaily
         state.taskId = self.extId
         state.stateId = self.getId().appending("03")
         state.isDone = false
-        
+        state.repeatTask = isRepeat
         state.create_date = NSDate()
         self.state = state
         do{

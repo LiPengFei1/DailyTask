@@ -12,6 +12,7 @@ class AddTaskViewController: UIViewController {
     
     var taskExtId = ""
     var taskExt:TaskExt?
+    var isRepeat:Bool = true
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
@@ -47,10 +48,18 @@ class AddTaskViewController: UIViewController {
             make.height.equalTo(44)
         }
         
+        bgView.addSubview(repeatButton)
+        repeatButton.snp.makeConstraints { (make) in
+            make.top.equalTo(titleField.snp.bottom).offset(12)
+            make.left.equalTo(titleField.snp.left).offset(0)
+            make.width.equalTo(50)
+            make.height.equalTo(30)
+        }
+        
         let contentLabel = PFLabel(text: "内    容:", font: UIFont.systemFont(ofSize: 14.0))
         bgView.addSubview(contentLabel)
         contentLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(titleField.snp.bottom).offset(12)
+            make.top.equalTo(repeatButton.snp.bottom).offset(12)
             make.left.equalTo(bgView).offset(12)
         }
         
@@ -82,7 +91,7 @@ class AddTaskViewController: UIViewController {
                 taskExt.extName = name
                 taskExt.extDescription = content
                 taskExt.finishedCount = 0
-                let b = taskExt.insertTaskExtToData()
+                let b = taskExt.insertTaskExtToData(name: name!, descript: content, isRepeat: isRepeat)
                 if b {
                     print("保存成功")
                 }else{
@@ -95,7 +104,7 @@ class AddTaskViewController: UIViewController {
             if !(name?.isEmpty)! && !content.isEmpty  {
                 let taskExt = TaskExt.getTaskExtById(taskExtId: taskExtId)
 //                let taskExt = self.taskExt
-                let b = taskExt.insertDailyTaskToData(taskName: name!, content: content)
+                let b = taskExt.insertDailyTaskToData(taskName: name!, content: content,isRepeat: isRepeat)
                 if b {
                     print("保存成功")
                 }else{
@@ -110,6 +119,18 @@ class AddTaskViewController: UIViewController {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "loadNewDataSource"), object: nil)
         self.navigationController!.popViewController(animated: true)
         // 提示信息
+    }
+    
+    func chooseRepeatOrNoRepeat(btn:UIButton){
+        btn.isSelected = !btn.isSelected
+        if btn.isSelected {
+            btn.backgroundColor = UIColor.orange
+            isRepeat = true
+        }else{
+            btn.backgroundColor = UIColor.gray
+            isRepeat = false
+        }
+        
     }
 
     lazy var bgView:UIView = {
@@ -144,6 +165,19 @@ class AddTaskViewController: UIViewController {
         btn.layer.cornerRadius = 3.0
         btn.layer.masksToBounds = true
         btn.addTarget(self, action: #selector(saveTask), for: .touchUpInside)
+        return btn
+    }()
+    
+    lazy var repeatButton:UIButton = {
+        let btn:UIButton = UIButton()
+        btn.backgroundColor = UIColor.orange
+        btn.setTitle("重复", for: .selected)
+        btn.setTitle("不重复", for: .normal)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 14.0)
+        btn.isSelected = true
+        btn.layer.cornerRadius = 3.0
+        btn.layer.masksToBounds = true
+        btn.addTarget(self, action: #selector(chooseRepeatOrNoRepeat(btn:)), for: .touchUpInside)
         return btn
     }()
     override func didReceiveMemoryWarning() {
