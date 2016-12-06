@@ -44,8 +44,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         do{
             objects = try context.fetch(fetRequest) as! [NSManagedObject]
             loginUser = objects.first as? User
-            self.initTask(user: loginUser!)
-            print("查到了用户")
+            if (loginUser != nil) {
+            self.initTask(user: loginUser!)    
+            }
+            
         }catch let error{
             print(error)
         }

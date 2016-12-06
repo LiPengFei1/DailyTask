@@ -52,7 +52,6 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
             self.loadData()
         }
     }
-    
     // 查询数据
     func loadData(){
         // 取
@@ -60,7 +59,7 @@ class HomePageController: PFBaseViewController,UICollectionViewDelegate,UICollec
         // 查询 对象
         fetRequest.entity = NSEntityDescription.entity(forEntityName: "TaskExt", in: context)
         // 查询条件,不设置查询条件 会查询所有
-//        fetRequest.predicate = NSPredicate(format: "state.isDone = false")
+        fetRequest.predicate = NSPredicate(format: "state.isDone = false")
         // 按时间排序
         let sort:NSSortDescriptor = NSSortDescriptor(key: "state.create_date", ascending: false)
         fetRequest.sortDescriptors = [sort]
